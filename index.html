@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="data:,">
+  <title>venn</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif;
+      inline-size: min(100% - 16px, 1080px);
+      margin-inline: auto;
+      background: hsl(145deg 50% 95%);
+      color: hsl(145deg 50% 5%);
+    }
+
+    header {
+      display: flex;
+      justify-content: center;
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 8px;
+      border-radius: 4px;
+      transition: background-color 600ms;
+    }
+
+    .container:focus-within {
+      background: hsl(145deg 50% 90%);
+      transition: background-color 200ms;
+    }
+
+    .item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    label {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    textarea,
+    .diagram-html,
+    .diagram-css {
+      font-family: inherit;
+      font-size: 1rem;
+      inline-size: 100%;
+      min-block-size: 200px;
+      padding: 4px;
+      border-radius: 4px;
+      border: 1px solid hsl(145deg 50% 80%);
+      resize: vertical;
+      background: hsl(145deg 20% 99%)
+    }
+
+    .diagram-html {
+      flex: 1;
+      block-size: 100px;
+    }
+
+    .diagram-css {
+      flex: 1;
+      display: block;
+      overflow: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>venn</h1>
+  </header>
+
+  <main>
+    <div class="content container">
+      <div class="item">
+        <label for="left">Left</label>
+        <textarea id="left"></textarea>
+      </div>
+
+      <div class="item">
+        <label for="middle">Middle</label>
+        <textarea id="middle"></textarea>
+      </div>
+
+      <div class="item">
+        <label for="right">Right</label>
+        <textarea id="right"></textarea>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="item">
+        <label for="html">HTML</label>
+        <textarea id="html" class="diagram-html"></textarea>
+      </div>
+
+      <div class="item">
+        <label for="style">CSS</label>
+        <style id="style" class="diagram-css" contenteditable>
+          svg {
+            inline-size: 100%;
+            block-size: 720px;
+          }
+
+          svg text {
+            font-size: 1px;
+          }
+
+          .circle {
+            stroke-width: 0.05;
+            fill: none;
+          }
+
+          .left.circle {
+            stroke: hsl(211deg 50% 50%);
+          }
+
+          .right.circle {
+            stroke: hsl(42deg 50% 50%);
+          }
+        </style>
+      </div>
+    </div>
+
+    <div class="container">
+      <svg aria-labelledby="venn-diagram" viewBox="0 0 24 24">
+        <title id="venn-diagram">Venn diagram</title>
+        <g class="left circle">
+          <circle cx="7" cy="12" r="12" />
+        </g>
+        <g class="right circle">
+          <circle cx="17" cy="12" r="12" />
+        </g>
+      </svg>
+    </div>
+  </main>
+
+  <script type="module">
+    const htmlBlock = document.getElementById('html');
+    const svg = document.querySelector('svg');
+    const leftCircle = svg.querySelector('.left.circle');
+
+    const items = {
+      left: ['Left 1', 'Left 2', 'Left 3', 'Left 4', 'Left 5', 'Left 6'],
+      middle: ['Middle 1', 'Middle 2', 'Middle 3'],
+      right: ['Right 1', 'Right 2', 'Right 3']
+    }
+
+    function displayItems() {
+      const radius = 12;
+      // SVG plots start in quadrant 4
+      const transformX = x => (x - 8) * -1;
+      const transformY = y => (y - radius) * -1;
+
+      const leftJump = ((2 * Math.PI / 3) - (4 * Math.PI / 3)) / (items.left.length);
+      for (const [index, item] of items.left.entries()) {
+        const adjustment = index + items.left.length / 2;
+        const x = Math.cos((2 * Math.PI / 3) + (leftJump * adjustment)) * radius;
+        const y = Math.sin((2 * Math.PI / 3) + (leftJump * adjustment)) * radius;
+        leftCircle.insertAdjacentHTML('beforeend', `<text x=${transformX(x)} y=${transformY(y)}>${item}</text>`);
+      }
+
+      htmlBlock.textContent = svg.outerHTML;
+    }
+
+    document.querySelector('.content.container').addEventListener('keyup', e => {
+      items[e.target.id] = e.target.textContent.split('\n');
+      displayItems();
+    });
+
+    displayItems();
+  </script>
+</body>
+
+</html>
