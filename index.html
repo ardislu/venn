@@ -152,6 +152,7 @@
   <script type="module">
     const htmlBlock = document.getElementById('html');
     const svg = document.querySelector('svg');
+    const initialSvg = svg.innerHTML;
 
     function debounce(fn, wait) {
       let timeoutId;
@@ -162,6 +163,8 @@
     }
 
     function displayItems() {
+      svg.innerHTML = initialSvg;
+
       const items = {};
       const textareas = document.querySelectorAll('.content.container textarea');
       textareas.forEach(textarea => {
