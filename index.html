@@ -153,13 +153,21 @@
     const htmlBlock = document.getElementById('html');
     const svg = document.querySelector('svg');
 
-    const items = {
-      left: ['Left 1', 'Left 2', 'Left 3', 'Left 4', 'Left 5', 'Left 6'],
-      middle: ['Middle 1', 'Middle 2', 'Middle 3'],
-      right: ['Right 1', 'Right 2', 'Right 3']
+    function debounce(fn, wait) {
+      let timeoutId;
+      return () => {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(fn, wait);
+      }
     }
 
     function displayItems() {
+      const items = {};
+      const textareas = document.querySelectorAll('.content.container textarea');
+      textareas.forEach(textarea => {
+        items[textarea.id] = textarea.value.split('\n');
+      });
+
       const radius = 12;
       // SVG plots start in quadrant 4
       const transformX = x => (x - 8) * -1;
@@ -176,10 +184,7 @@
       htmlBlock.textContent = svg.outerHTML;
     }
 
-    document.querySelector('.content.container').addEventListener('keyup', e => {
-      items[e.target.id] = e.target.textContent.split('\n');
-      displayItems();
-    });
+    document.querySelector('.content.container').addEventListener('keyup', debounce(displayItems, 250));
 
     displayItems();
   </script>
