@@ -124,16 +124,16 @@
             font-size: 1px;
           }
 
-          .circle {
+          circle {
             stroke-width: 0.05;
             fill: none;
           }
 
-          .left.circle {
+          circle.left {
             stroke: hsl(211deg 50% 50%);
           }
 
-          .right.circle {
+          circle.right {
             stroke: hsl(42deg 50% 50%);
           }
         </style>
@@ -143,12 +143,8 @@
     <div class="container">
       <svg aria-labelledby="venn-diagram" viewBox="0 0 24 24">
         <title id="venn-diagram">Venn diagram</title>
-        <g class="left circle">
-          <circle cx="7" cy="12" r="12" />
-        </g>
-        <g class="right circle">
-          <circle cx="17" cy="12" r="12" />
-        </g>
+        <circle class="left" cx="7" cy="12" r="12" />
+        <circle class="right" cx="17" cy="12" r="12" />
       </svg>
     </div>
   </main>
@@ -156,7 +152,6 @@
   <script type="module">
     const htmlBlock = document.getElementById('html');
     const svg = document.querySelector('svg');
-    const leftCircle = svg.querySelector('.left.circle');
 
     const items = {
       left: ['Left 1', 'Left 2', 'Left 3', 'Left 4', 'Left 5', 'Left 6'],
@@ -175,7 +170,7 @@
         const adjustment = index + items.left.length / 2;
         const x = Math.cos((2 * Math.PI / 3) + (leftJump * adjustment)) * radius;
         const y = Math.sin((2 * Math.PI / 3) + (leftJump * adjustment)) * radius;
-        leftCircle.insertAdjacentHTML('beforeend', `<text x=${transformX(x)} y=${transformY(y)}>${item}</text>`);
+        svg.insertAdjacentHTML('beforeend', `<text x=${transformX(x)} y=${transformY(y)}>${item}</text>`);
       }
 
       htmlBlock.textContent = svg.outerHTML;
