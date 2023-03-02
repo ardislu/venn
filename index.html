@@ -184,7 +184,15 @@
         const adjustment = index + items.left.length / 2;
         const x = Math.cos((2 * Math.PI / 3) + (leftJump * adjustment)) * radius;
         const y = Math.sin((2 * Math.PI / 3) + (leftJump * adjustment)) * radius;
-        svg.insertAdjacentHTML('beforeend', `<text x=${transformX(x)} y=${transformY(y)}>${item}</text>`);
+        svg.insertAdjacentHTML('beforeend', `<text x=${transformXLeft(x)} y=${transformY(y)}>${item}</text>`);
+      }
+
+      const rightJump = ((5 * Math.PI / 3) - (Math.PI / 3)) / (items.right.length);
+      for (const [index, item] of items.right.entries()) {
+        const adjustment = index + items.right.length / 2;
+        const x = Math.cos((Math.PI / 3) + (rightJump * adjustment)) * radius * -1;
+        const y = Math.sin((Math.PI / 3) + (rightJump * adjustment)) * radius;
+        svg.insertAdjacentHTML('beforeend', `<text x=${transformXRight(x)} y=${transformY(y)}>${item}</text>`);
       }
 
       htmlBlock.textContent = svg.outerHTML;
