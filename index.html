@@ -174,7 +174,7 @@
       const radius = 12;
       const offset = 5.5;
       const leftMargin = 1;
-      const rightMargin = 5;
+      const rightMargin = 2;
       const transformY = y => y * -1;
       const transformXLeft = x => (x + offset - leftMargin) * -1;
       const transformXRight = x => x + offset - rightMargin;
@@ -187,11 +187,11 @@
         svg.insertAdjacentHTML('beforeend', `<text x=${transformXLeft(x)} y=${transformY(y)}>${item}</text>`);
       }
 
-      const rightJump = ((5 * Math.PI / 3) - (Math.PI / 3)) / (items.right.length);
+      const rightJump = ((2 * Math.PI / 3) - (4 * Math.PI / 3)) / (items.right.length);
       for (const [index, item] of items.right.entries()) {
         const adjustment = index + items.right.length / 2;
-        const x = Math.cos((Math.PI / 3) + (rightJump * adjustment)) * radius * -1;
-        const y = Math.sin((Math.PI / 3) + (rightJump * adjustment)) * radius;
+        const x = Math.cos((2 * Math.PI / 3) + (rightJump * adjustment)) * radius;
+        const y = Math.sin((2 * Math.PI / 3) + (rightJump * adjustment)) * radius;
         svg.insertAdjacentHTML('beforeend', `<text x=${transformXRight(x)} y=${transformY(y)}>${item}</text>`);
       }
 
